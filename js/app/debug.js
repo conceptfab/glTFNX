@@ -43,7 +43,7 @@ export class DebugManager {
 
   setRenderer(renderer) {
     this.state.renderer = renderer;
-    console.log('DebugManager: Ustawiono renderer', {
+    console.log('🔧 DebugManager: Ustawiono renderer', {
       antialias: renderer.capabilities?.antialias,
       capabilities: renderer.capabilities,
     });
@@ -51,38 +51,38 @@ export class DebugManager {
 
   setScene(scene) {
     this.state.scene = scene;
-    console.log('DebugManager: Ustawiono scene');
+    console.log('🔧 DebugManager: Ustawiono scene');
   }
 
   setCamera(camera) {
     this.state.camera = camera;
-    console.log('DebugManager: Ustawiono camera');
+    console.log('🔧 DebugManager: Ustawiono camera');
   }
 
   setControls(controls) {
     this.state.controls = controls;
-    console.log('DebugManager: Ustawiono controls');
+    console.log('🔧 DebugManager: Ustawiono controls');
   }
 
   setStats(stats) {
     this.state.stats = stats;
-    console.log('DebugManager: Ustawiono stats');
+    console.log('🔧 DebugManager: Ustawiono stats');
   }
 
   setModelManager(modelManager) {
     this.state.modelManager = modelManager;
-    console.log('DebugManager: Ustawiono modelManager');
+    console.log('🔧 DebugManager: Ustawiono modelManager');
   }
 
   setSceneBuilder(sceneBuilder) {
     this.state.sceneBuilder = sceneBuilder;
-    console.log('DebugManager: Ustawiono sceneBuilder');
+    console.log('🔧 DebugManager: Ustawiono sceneBuilder');
   }
 
   // Inicjalizacja debugowania
   async init() {
     try {
-      console.log('DebugManager: Rozpoczęcie inicjalizacji');
+      console.log('🔧 DebugManager: Rozpoczęcie inicjalizacji');
       this.isEnabled = true;
 
       // Inicjalizacja UI
@@ -94,9 +94,9 @@ export class DebugManager {
       // Ustawienie domyślnych wartości
       this.setDefaultValues();
 
-      console.log('DebugManager: Inicjalizacja zakończona pomyślnie');
+      console.log('✅ DebugManager: Inicjalizacja zakończona pomyślnie');
     } catch (error) {
-      console.error('DebugManager: Błąd podczas inicjalizacji:', error);
+      console.error('❌ DebugManager: Błąd podczas inicjalizacji:', error);
       this.showNotification(
         'Błąd podczas inicjalizacji debuggera',
         5000,
