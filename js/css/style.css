@@ -1183,7 +1183,6 @@ a:hover {
   padding: 10px;
   border-radius: 0;
   overflow-y: auto;
-  border-right: 1px solid #3823a2;
   pointer-events: auto;
 }
 
@@ -1211,13 +1210,13 @@ a:hover {
 
 .render-info-group {
   margin-bottom: 8px;
-  border-left: 2px solid #3823a2;
-  padding-left: 8px;
+  padding-left: 6px;
 }
 
 .render-info-group-title {
   font-weight: bold;
-  color: #3823a2;
+  color: #ffffff;
+  font-size: 11px;
   margin-bottom: 3px;
 }
 

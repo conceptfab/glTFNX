@@ -1001,61 +1001,19 @@ ${this.formatDifferences(report.differences)}
 
   // Kopiowanie zawartości debugowania do schowka
   copyDebugContent() {
-    try {
-      const content = document.getElementById('render-info-content');
-      if (!content) {
-        console.error('Nie znaleziono elementu render-info-content');
-        return;
-      }
-
-      // Formatujemy tekst do skopiowania
-      let debugText = '';
-      const sections = content.querySelectorAll('.render-info-group');
-
-      sections.forEach((section) => {
-        const title = section.querySelector('.render-info-group-title');
-        if (title) {
-          debugText += `=== ${title.textContent} ===\n`;
-        }
-
-        const items = section.querySelectorAll('.render-info-item');
-        items.forEach((item) => {
-          const key =
-            item.querySelector('.render-info-key')?.textContent?.trim() || '';
-          const value =
-            item.querySelector('.render-info-value')?.textContent?.trim() || '';
-          if (key && value) {
-            debugText += `${key} ${value}\n`;
-          }
-        });
-        debugText += '\n';
+    const content = document.getElementById('render-info-content').textContent;
+    navigator.clipboard
+      .writeText(content)
+      .then(() => {
+        const button = document.querySelector('.copy-button');
+        button.textContent = 'Skopiowano!';
+        setTimeout(() => {
+          button.textContent = 'Kopiuj do schowka';
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error('Błąd podczas kopiowania:', err);
       });
-
-      // Kopiuj do schowka
-      navigator.clipboard
-        .writeText(debugText)
-        .then(() => {
-          const button = document.getElementById('copyDebugContent');
-          if (button) {
-            button.textContent = 'Skopiowano!';
-            setTimeout(() => {
-              button.textContent = 'Kopiuj';
-            }, 2000);
-          }
-        })
-        .catch((err) => {
-          console.error('Błąd podczas kopiowania:', err);
-          const button = document.getElementById('copyDebugContent');
-          if (button) {
-            button.textContent = 'Błąd kopiowania!';
-            setTimeout(() => {
-              button.textContent = 'Kopiuj';
-            }, 2000);
-          }
-        });
-    } catch (error) {
-      console.error('Błąd podczas kopiowania zawartości:', error);
-    }
   }
 }
 
