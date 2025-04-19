@@ -1,13 +1,11 @@
-- light manager
+- light manager dodaje światła
 - swiatło enviroment
 - model manager
 - cienie
 
-
 - progress bar przy ładowaniu plików
-- lighthelper, osie, podłoga, przycisk siatka, stystyki, boudning box
+- lighthelper, osie, podłoga + , przycisk siatka, stystyki, boudning box
 - usuwanie podwójnych modeli
-
 
 - wykrywanie sprzętu
 - poPrawki UI

@@ -215,16 +215,6 @@ export class SceneBuilder {
           sceneProfile.environment
         );
 
-        // Wyłącz environment jeśli jest wyłączone w profilu
-        if (!sceneProfile.environment.enabled) {
-          this.config.scene.environment = null;
-          this.config.scene.background = new THREE.Color(
-            sceneProfile.background.color
-          );
-          console.log('SceneBuilder: Środowisko wyłączone');
-          return;
-        }
-
         const envPath = sceneProfile.environment.path || 'textures/';
         const envFiles = sceneProfile.environment.files || [
           'posx.jpg',
@@ -259,15 +249,7 @@ export class SceneBuilder {
 
           envMap.encoding = colorSpace;
           this.config.scene.environment = envMap;
-
-          // Ustawiamy kolor tła tylko jeśli nie jest ustawiony w profilu
-          if (!sceneProfile.background?.color) {
-            this.config.scene.background = envMap;
-          } else {
-            this.config.scene.background = new THREE.Color(
-              sceneProfile.background.color
-            );
-          }
+          this.config.scene.background = envMap;
 
           console.log('SceneBuilder: Środowisko skonfigurowane pomyślnie');
         } catch (error) {

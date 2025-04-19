@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 
 export class LightManager {
-  constructor() {
+  constructor(scene) {
+    this.scene = scene;
     this.lights = new Map(); // Mapa przechowująca wszystkie światła
     this.helpers = new Map(); // Mapa przechowująca pomocniki świateł
     this.isLightingVisible = false;
@@ -19,34 +20,33 @@ export class LightManager {
 
     if (!sceneProfile?.lighting?.enabled) {
       console.log('💡 LightManager: Oświetlenie wyłączone w profilu');
-      return [];
+      return;
     }
 
     // Ustaw widoczność oświetlenia
     this.isLightingVisible = sceneProfile.lighting.visible || false;
 
-    const lights = [];
-
     // Dodaj światło ambient
     if (sceneProfile.lighting.ambient?.enabled) {
-      lights.push(this.addAmbientLight(sceneProfile.lighting.ambient));
+      this.addAmbientLight(sceneProfile.lighting.ambient);
     }
 
     // Dodaj światło hemisphere
     if (sceneProfile.lighting.hemisphere?.enabled) {
-      lights.push(this.addHemisphereLight(sceneProfile.lighting.hemisphere));
+      this.addHemisphereLight(sceneProfile.lighting.hemisphere);
     }
 
     // Dodaj pozostałe światła
     if (sceneProfile.lights?.length > 0) {
       sceneProfile.lights.forEach((lightConfig) => {
         if (lightConfig.enabled === true) {
-          lights.push(this.addLight(lightConfig));
+          this.addLight(lightConfig);
         }
       });
     }
 
-    return lights;
+    // Aktualizuj widoczność wszystkich świateł
+    this.updateLightVisibility();
   }
 
   // Dodawanie światła ambient
@@ -56,9 +56,9 @@ export class LightManager {
       config.intensity
     );
     light.name = 'ambient_light';
+    this.scene.add(light);
     this.lights.set(light.name, light);
-    console.log('💡 LightManager: Utworzono światło ambient:', light);
-    return light;
+    console.log('💡 LightManager: Dodano światło ambient:', light);
   }
 
   // Dodawanie światła hemisphere
@@ -69,9 +69,9 @@ export class LightManager {
       config.intensity
     );
     light.name = 'hemisphere_light';
+    this.scene.add(light);
     this.lights.set(light.name, light);
-    console.log('💡 LightManager: Utworzono światło hemisphere:', light);
-    return light;
+    console.log('💡 LightManager: Dodano światło hemisphere:', light);
   }
 
   // Dodawanie dowolnego typu światła
@@ -98,6 +98,7 @@ export class LightManager {
             config.target.y,
             config.target.z
           );
+          this.scene.add(light.target);
         }
         if (config.castShadow) {
           light.castShadow = true;
@@ -145,6 +146,7 @@ export class LightManager {
             config.target.y,
             config.target.z
           );
+          this.scene.add(light.target);
         }
         if (config.castShadow) {
           light.castShadow = true;
@@ -176,23 +178,23 @@ export class LightManager {
 
       default:
         console.warn(`💡 LightManager: Nieznany typ światła: ${config.type}`);
-        return null;
+        return;
     }
 
     light.name = name;
+    this.scene.add(light);
     this.lights.set(name, light);
 
-    // Utwórz pomocnik światła jeśli jest skonfigurowany
+    // Dodaj pomocnik światła jeśli jest skonfigurowany
     if (config.helper?.visible) {
-      this.createLightHelper(light, config.helper);
+      this.addLightHelper(light, config.helper);
     }
 
-    console.log('💡 LightManager: Utworzono światło:', light);
-    return light;
+    console.log('💡 LightManager: Dodano światło:', light);
   }
 
-  // Tworzenie pomocnika światła
-  createLightHelper(light, config) {
+  // Dodawanie pomocnika światła
+  addLightHelper(light, config) {
     let helper;
 
     switch (light.type) {
@@ -213,12 +215,12 @@ export class LightManager {
         break;
 
       default:
-        return null;
+        return;
     }
 
+    this.scene.add(helper);
     this.helpers.set(light.name, helper);
-    console.log('💡 LightManager: Utworzono pomocnik światła:', helper);
-    return helper;
+    console.log('💡 LightManager: Dodano pomocnik światła:', helper);
   }
 
   // Usuwanie światła
@@ -226,8 +228,19 @@ export class LightManager {
     const light = this.lights.get(name);
     if (light) {
       // Usuń pomocnik jeśli istnieje
-      this.helpers.delete(name);
+      const helper = this.helpers.get(name);
+      if (helper) {
+        this.scene.remove(helper);
+        this.helpers.delete(name);
+      }
 
+      // Usuń target jeśli istnieje
+      if (light.target) {
+        this.scene.remove(light.target);
+      }
+
+      // Usuń światło
+      this.scene.remove(light);
       this.lights.delete(name);
       console.log('💡 LightManager: Usunięto światło:', name);
     }
@@ -235,8 +248,9 @@ export class LightManager {
 
   // Usuwanie wszystkich świateł
   clearAllLights() {
-    this.lights.clear();
-    this.helpers.clear();
+    this.lights.forEach((light, name) => {
+      this.removeLight(name);
+    });
     console.log('💡 LightManager: Usunięto wszystkie światła');
   }
 
@@ -244,6 +258,9 @@ export class LightManager {
   updateLightVisibility() {
     this.lights.forEach((light) => {
       light.visible = this.isLightingVisible;
+    });
+    this.helpers.forEach((helper) => {
+      helper.visible = this.isLightingVisible;
     });
     console.log(
       '💡 LightManager: Zaktualizowano widoczność świateł:',
@@ -255,9 +272,10 @@ export class LightManager {
   toggleLightVisibility() {
     this.isLightingVisible = !this.isLightingVisible;
     this.updateLightVisibility();
+    return this.isLightingVisible;
   }
 
-  // Przełączanie widoczności pomocników
+  // Przełączanie widoczności pomocników świateł
   toggleHelpersVisibility() {
     this.helpers.forEach((helper) => {
       helper.visible = !helper.visible;
@@ -265,27 +283,44 @@ export class LightManager {
     console.log('💡 LightManager: Przełączono widoczność pomocników świateł');
   }
 
-  // Konwersja koloru
+  // Konwersja koloru z różnych formatów
   parseColor(color) {
     if (typeof color === 'string') {
-      return new THREE.Color(color);
+      if (color.startsWith('#')) {
+        return new THREE.Color(color);
+      }
+      return new THREE.Color(parseInt(color.replace('#', '0x'), 16));
     }
     return new THREE.Color(color);
   }
 
   // Pobieranie informacji o światłach
   getLightInfo() {
-    const info = [];
+    const info = {
+      total: this.lights.size,
+      types: {
+        ambient: 0,
+        hemisphere: 0,
+        directional: 0,
+        point: 0,
+        spot: 0,
+        rectArea: 0,
+      },
+      lights: [],
+    };
+
     this.lights.forEach((light) => {
-      info.push({
+      info.types[light.type.toLowerCase()]++;
+      info.lights.push({
         name: light.name,
         type: light.type,
-        color: light.color.getHexString(),
         intensity: light.intensity,
         position: light.position.clone(),
         visible: light.visible,
+        castShadow: light.castShadow,
       });
     });
+
     return info;
   }
 }

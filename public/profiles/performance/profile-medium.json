@@ -30,6 +30,7 @@
       "bias": -0.001,
       "radius": 4
     },
+    "physicallyCorrectLights": true,
     "pixelRatio": 1.0
   },
   "floorQuality": {

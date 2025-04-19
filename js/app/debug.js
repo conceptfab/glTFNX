@@ -707,14 +707,8 @@ ${this.formatDifferences(report.differences)}
         addInfo(
           allParamsSection,
           'Kolor tła',
-          scene.background
-            ? scene.background.isColor
-              ? `#${scene.background.getHexString()}`
-              : scene.background.isTexture
-              ? 'Texture'
-              : typeof scene.background === 'string'
-              ? scene.background
-              : 'Nieznany typ tła'
+          sceneProfile.background?.color
+            ? `#${sceneProfile.background.color.toString(16)}`
             : 'Brak'
         );
         addInfo(
