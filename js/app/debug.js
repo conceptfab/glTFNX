@@ -976,11 +976,12 @@ ${this.formatDifferences(report.differences)}
           this.state.helpersVisible ? 'Tak' : 'Nie'
         );
 
+        let lightCounter = 1;
         scene.traverse((object) => {
           if (object.isLight) {
             addInfo(
               allParamsSection,
-              object.name || 'Bez nazwy',
+              `Światło ${lightCounter++}`,
               `Typ: ${
                 object.type
               }, Kolor: ${object.color.getHexString()}, Intensywność: ${
