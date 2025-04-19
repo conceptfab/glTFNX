@@ -15,7 +15,7 @@
     "xrCompatible": false,
     "autoClear": true,
     "logarithmicDepthBuffer": false,
-    "toneMapping": "NoToneMapping",
+    "toneMapping": "LinearToneMapping",
     "toneMappingExposure": 1.0,
     "outputEncoding": "sRGBEncoding",
     "alpha": true,
@@ -30,7 +30,6 @@
       "bias": -0.001,
       "radius": 2
     },
-    "physicallyCorrectLights": false,
     "pixelRatio": 1.0
   },
   "floorQuality": {

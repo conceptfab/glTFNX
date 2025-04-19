@@ -30,7 +30,6 @@
     "toneMappingExposure": 1.0,
     "outputEncoding": "sRGBEncoding",
     "alpha": false,
-    "physicallyCorrectLights": true,
     "logarithmicDepthBuffer": false
   },
   "shadowSettings": {
