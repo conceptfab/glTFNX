@@ -1,0 +1,103 @@
+{
+  "id": "default",
+  "name": "Domyślny (SSAA)",
+  "description": "Uniwersalny profil dla urządzeń desktopowych z SSAA",
+  "category": "profile",
+  "renderer": {
+    "antialias": false,
+    "precision": "mediump",
+    "powerPreference": "default",
+    "failIfMajorPerformanceCaveat": false,
+    "depth": true,
+    "stencil": false,
+    "premultipliedAlpha": true,
+    "preserveDrawingBuffer": false,
+    "xrCompatible": false,
+    "autoClear": true,
+    "pixelRatio": 2.0,
+    "shadowMap": {
+      "enabled": true,
+      "type": "PCFShadowMap",
+      "mapSize": {
+        "width": 1024,
+        "height": 1024
+      },
+      "blurSamples": 4,
+      "bias": 0.0001,
+      "radius": 1.0
+    },
+    "toneMapping": "NoToneMapping",
+    "toneMappingExposure": 1.0,
+    "outputEncoding": "sRGBEncoding",
+    "alpha": false,
+    "physicallyCorrectLights": true,
+    "logarithmicDepthBuffer": false
+  },
+  "shadowSettings": {
+    "mapSize": {
+      "width": 1024,
+      "height": 1024
+    },
+    "blurSamples": 8,
+    "bias": -0.001,
+    "radius": 4,
+    "directionalLight": {
+      "enabled": true,
+      "mapSize": {
+        "width": 2048,
+        "height": 2048
+      },
+      "camera": {
+        "left": -50,
+        "right": 50,
+        "top": 50,
+        "bottom": -50,
+        "near": 0.1,
+        "far": 100
+      },
+      "blurSamples": 16,
+      "bias": -0.0001,
+      "radius": 2
+    }
+  },
+  "floorQuality": {
+    "segments": 128
+  },
+  "postprocessing": {
+    "enabled": true,
+    "effects": {
+      "EffectComposer": { "enabled": true },
+      "RenderPass": { "enabled": true },
+      "ShaderPass": { "enabled": true },
+      "UnrealBloomPass": {
+        "enabled": true,
+        "strength": 1.5,
+        "radius": 0.4,
+        "threshold": 0.85
+      },
+      "SSAOPass": {
+        "enabled": true,
+        "radius": 0.2,
+        "intensity": 1.0,
+        "bias": 0.1
+      },
+      "FXAAPass": { "enabled": false },
+      "SMAAPass": { "enabled": false },
+      "BokehPass": {
+        "enabled": false,
+        "focus": 0.5,
+        "aperture": 0.0001,
+        "maxblur": 0.01
+      }
+    }
+  },
+  "quality": {
+    "shadows": "medium",
+    "textures": "high",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "anisotropy": 8
+  }
+}

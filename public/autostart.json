@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "desktop": {
+      "performance": "profile-medium",
+      "scene": "scene-default"
+    },
+    "mobile": {
+      "performance": "profile-mobile",
+      "scene": "scene-default"
+    },
+    "fallback": {
+      "performance": "profile-medium",
+      "scene": "scene-default"
+    }
+  },
+  "debug": false,
+  "autoDetect": true
+}

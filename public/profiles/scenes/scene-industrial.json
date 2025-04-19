@@ -1,0 +1,211 @@
+{
+  "id": "scene-industrial",
+  "name": "Industrialne",
+  "description": "Scena w stylu przemysłowym z podwójnym oświetleniem",
+  "category": "scene",
+  "renderer": {
+    "toneMapping": "ACESFilmicToneMapping",
+    "toneMappingExposure": 1.2,
+    "outputEncoding": "sRGBEncoding",
+    "alpha": false
+  },
+  "postprocessing": {
+    "enabled": true,
+    "effects": {
+      "EffectComposer": { "enabled": true },
+      "RenderPass": { "enabled": true },
+      "ShaderPass": { "enabled": true },
+      "UnrealBloomPass": {
+        "enabled": true,
+        "strength": 0.8,
+        "radius": 0.4,
+        "threshold": 0.85
+      },
+      "SSAOPass": {
+        "enabled": true,
+        "radius": 0.2,
+        "intensity": 1.0,
+        "bias": 0.1
+      },
+      "FXAAPass": { "enabled": true },
+      "BokehPass": {
+        "enabled": false,
+        "focus": 0.5,
+        "aperture": 0.0001,
+        "maxblur": 0.01
+      }
+    }
+  },
+  "cameras": {
+    "default": {
+      "fov": 45,
+      "near": 0.25,
+      "far": 2000,
+      "position": {
+        "x": 50,
+        "y": 5,
+        "z": 0
+      },
+      "target": {
+        "x": 0,
+        "y": 5,
+        "z": 0
+      }
+    },
+    "back": {
+      "fov": 45,
+      "near": 0.25,
+      "far": 2000,
+      "position": {
+        "x": -50,
+        "y": 5,
+        "z": 0
+      },
+      "target": {
+        "x": 0,
+        "y": 5,
+        "z": 0
+      }
+    },
+    "top": {
+      "fov": 45,
+      "near": 0.25,
+      "far": 2000,
+      "position": {
+        "x": 0,
+        "y": 50,
+        "z": 0
+      },
+      "target": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    }
+  },
+  "background": {
+    "color": 3289650
+  },
+  "environment": {
+    "enabled": true,
+    "path": "textures/",
+    "files": [
+      "posx.jpg",
+      "negx.jpg",
+      "posy.jpg",
+      "negy.jpg",
+      "posz.jpg",
+      "negz.jpg"
+    ],
+    "colorSpace": "srgb"
+  },
+  "lighting": {
+    "enabled": true,
+    "visible": false,
+    "ambient": {
+      "enabled": true,
+      "intensity": 0.4,
+      "color": 13421772
+    },
+    "hemisphere": {
+      "enabled": true,
+      "intensity": 0.8,
+      "skyColor": "#cccccc",
+      "groundColor": "#555555"
+    }
+  },
+  "lights": [
+    {
+      "type": "DirectionalLight",
+      "name": "main_light",
+      "color": 16115446,
+      "intensity": 0.8,
+      "position": {
+        "x": 50,
+        "y": 50,
+        "z": 50
+      },
+      "helper": {
+        "visible": false,
+        "size": 7.5
+      },
+      "castShadow": true
+    },
+    {
+      "type": "DirectionalLight",
+      "name": "secondary_light",
+      "color": 16711680,
+      "intensity": 0.5,
+      "position": {
+        "x": -50,
+        "y": 30,
+        "z": -50
+      },
+      "helper": {
+        "visible": false,
+        "size": 7.5
+      },
+      "castShadow": true
+    }
+  ],
+  "axis": {
+    "length": 5,
+    "visible": false
+  },
+  "grid": {
+    "size": 125,
+    "divisions": 25,
+    "visible": false
+  },
+  "floor": {
+    "size": 125,
+    "segments": 128,
+    "visible": false,
+    "material": {
+      "type": "MeshPhysicalMaterial",
+      "color": 16777215,
+      "metalness": 0.0,
+      "roughness": 1,
+      "envMapIntensity": 0.7,
+      "clearcoat": 0.4,
+      "clearcoatRoughness": 0.2,
+      "opacity": 0.95,
+      "reflectivity": 0.3,
+      "transmission": 0.0,
+      "thickness": 0.5,
+      "transparent": true,
+      "side": "FrontSide",
+      "alphaTest": 0.0,
+      "depthWrite": true,
+      "depthTest": true
+    },
+    "texture": {
+      "file": "textures/opacity_floor.jpg",
+      "repeat": 1,
+      "filter": "linear",
+      "anisotropy": "max",
+      "wrap": "repeat",
+      "encoding": "sRGB",
+      "mapping": "uv",
+      "useAlpha": true,
+      "alphaChannel": {
+        "repeat": 1,
+        "filter": "linear"
+      }
+    }
+  },
+  "controls": {
+    "enableDamping": true,
+    "dampingFactor": 0.05,
+    "rotateSpeed": 0.8,
+    "panSpeed": 0.8,
+    "zoomSpeed": 1.2,
+    "minDistance": 1,
+    "maxDistance": 500,
+    "minPolarAngle": 0,
+    "maxPolarAngle": 3.14159,
+    "enablePan": true,
+    "enableRotate": true,
+    "enableZoom": true
+  }
+}

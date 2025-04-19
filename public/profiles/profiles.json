@@ -1,0 +1,54 @@
+{
+  "profiles": [
+    {
+      "id": "default",
+      "name": "Domyślny",
+      "description": "Standardowy profil",
+      "path": "public/profiles/performance/default.json",
+      "category": "profile"
+    },
+    {
+      "id": "profile-high",
+      "name": "Wysoka jakość",
+      "description": "Profil wysokiej jakości dla wydajnych komputerów",
+      "path": "public/profiles/performance/profile-high.json",
+      "category": "profile"
+    },
+    {
+      "id": "profile-medium",
+      "name": "Średnia jakość",
+      "description": "Zbalansowany profil dla większości urządzeń",
+      "path": "public/profiles/performance/profile-medium.json",
+      "category": "profile"
+    },
+    {
+      "id": "profile-mobile",
+      "name": "Mobilny",
+      "description": "Profil zoptymalizowany dla urządzeń mobilnych",
+      "path": "public/profiles/performance/profile-mobile.json",
+      "category": "profile"
+    },
+    {
+      "id": "scene-default",
+      "name": "Domyślna scena",
+      "description": "Standardowa scena",
+      "path": "public/profiles/scenes/scene-default.json",
+      "category": "scene",
+      "default": true
+    },
+    {
+      "id": "scene-studio",
+      "name": "Studio",
+      "description": "Neutralne tło studyjne",
+      "path": "public/profiles/scenes/scene-studio.json",
+      "category": "scene"
+    },
+    {
+      "id": "scene-industrial",
+      "name": "Industrialne",
+      "description": "Scena w stylu przemysłowym",
+      "path": "public/profiles/scenes/scene-industrial.json",
+      "category": "scene"
+    }
+  ]
+}

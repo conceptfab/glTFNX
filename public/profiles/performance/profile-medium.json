@@ -1,0 +1,55 @@
+{
+  "id": "profile-medium",
+  "name": "Średnia jakość (FXAA)",
+  "description": "Profil zoptymalizowany pod FXAA dla typowych komputerów biurowych i laptopów",
+  "category": "profile",
+  "renderer": {
+    "antialias": false,
+    "precision": "mediump",
+    "powerPreference": "default",
+    "failIfMajorPerformanceCaveat": false,
+    "depth": true,
+    "stencil": true,
+    "premultipliedAlpha": true,
+    "preserveDrawingBuffer": true,
+    "xrCompatible": false,
+    "autoClear": true,
+    "logarithmicDepthBuffer": true,
+    "toneMapping": "ReinhardToneMapping",
+    "toneMappingExposure": 1.0,
+    "outputEncoding": "sRGBEncoding",
+    "alpha": true,
+    "shadowMap": {
+      "enabled": true,
+      "type": "PCFSoftShadowMap",
+      "mapSize": {
+        "width": 2048,
+        "height": 2048
+      },
+      "blurSamples": 8,
+      "bias": -0.001,
+      "radius": 4
+    },
+    "physicallyCorrectLights": true,
+    "pixelRatio": 1.0
+  },
+  "floorQuality": {
+    "segments": 128
+  },
+  "postprocessing": {
+    "enabled": true,
+    "bloom": true,
+    "ssao": true,
+    "fxaa": true,
+    "smaa": false
+  },
+  "quality": {
+    "shadows": "medium",
+    "textures": "high",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "anisotropy": 8
+  }
+}

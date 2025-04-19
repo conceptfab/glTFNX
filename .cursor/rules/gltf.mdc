@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+- w poszukiwaniu plików przeszukaj dokumentacje readme.md
+

@@ -1,0 +1,55 @@
+{
+  "id": "profile-high",
+  "name": "Wysoka jakość (MSAA)",
+  "description": "Profil wysokiej jakości z MSAA dla wydajnych komputerów gamingowych i stacji roboczych",
+  "category": "profile",
+  "renderer": {
+    "antialias": true,
+    "precision": "highp",
+    "powerPreference": "high-performance",
+    "failIfMajorPerformanceCaveat": false,
+    "depth": true,
+    "stencil": true,
+    "premultipliedAlpha": true,
+    "preserveDrawingBuffer": true,
+    "xrCompatible": false,
+    "autoClear": true,
+    "logarithmicDepthBuffer": true,
+    "toneMapping": "ACESFilmicToneMapping",
+    "toneMappingExposure": 1.0,
+    "outputEncoding": "sRGBEncoding",
+    "alpha": true,
+    "shadowMap": {
+      "enabled": true,
+      "type": "VSMShadowMap",
+      "mapSize": {
+        "width": 4096,
+        "height": 4096
+      },
+      "blurSamples": 12,
+      "bias": -0.001,
+      "radius": 4
+    },
+    "physicallyCorrectLights": true,
+    "pixelRatio": 1.0
+  },
+  "floorQuality": {
+    "segments": 256
+  },
+  "postprocessing": {
+    "enabled": true,
+    "bloom": true,
+    "ssao": true,
+    "fxaa": false,
+    "smaa": false
+  },
+  "quality": {
+    "shadows": "ultra",
+    "textures": "ultra",
+    "resolution": {
+      "width": 2560,
+      "height": 1440
+    },
+    "anisotropy": 16
+  }
+}
