@@ -118,7 +118,7 @@
     {
       "type": "DirectionalLight",
       "name": "main_light",
-      "enabled": false,
+      "enabled": true,
       "color": 16115446,
       "intensity": 0.8,
       "position": {

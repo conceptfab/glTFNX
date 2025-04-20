@@ -348,8 +348,41 @@ async function init() {
     // Konfiguracja shadowMap
     if (performanceProfile?.renderer?.shadowMap?.enabled === true) {
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type =
-        THREE[performanceProfile.renderer.shadowMap.type] || THREE.PCFShadowMap;
+
+      // Lepsza obsługa typu mapy cieni
+      const shadowMapType = performanceProfile.renderer.shadowMap.type;
+      console.log('Próba ustawienia shadowMap.type:', shadowMapType);
+
+      // Sprawdź czy wartość istnieje w THREE.js
+      const validShadowMapTypes = [
+        'BasicShadowMap',
+        'PCFShadowMap',
+        'PCFSoftShadowMap',
+        'VSMShadowMap',
+      ];
+      if (
+        typeof shadowMapType === 'string' &&
+        validShadowMapTypes.includes(shadowMapType)
+      ) {
+        if (THREE[shadowMapType]) {
+          renderer.shadowMap.type = THREE[shadowMapType];
+          console.log('Ustawiono typ mapy cieni:', shadowMapType);
+        } else {
+          console.warn(
+            'Typ mapy cieni nie istnieje w THREE.js:',
+            shadowMapType,
+            'używam PCFShadowMap'
+          );
+          renderer.shadowMap.type = THREE.PCFShadowMap;
+        }
+      } else {
+        console.warn(
+          'Nieznany typ mapy cieni:',
+          shadowMapType,
+          'używam PCFShadowMap'
+        );
+        renderer.shadowMap.type = THREE.PCFShadowMap;
+      }
 
       // Inicjalizacja mapSize jeśli nie istnieje
       if (!renderer.shadowMap.mapSize) {
@@ -371,18 +404,125 @@ async function init() {
     }
 
     // Konfiguracja tone mapping
-    renderer.toneMapping =
-      THREE[performanceProfile?.renderer?.toneMapping] || THREE.NoToneMapping;
+    const toneMapping = performanceProfile?.renderer?.toneMapping;
+    console.log('Próba ustawienia toneMapping:', toneMapping);
+
+    // Sprawdź czy wartość istnieje w THREE.js
+    const validToneMappingTypes = [
+      'NoToneMapping',
+      'LinearToneMapping',
+      'ReinhardToneMapping',
+      'CineonToneMapping',
+      'ACESFilmicToneMapping',
+    ];
+    if (
+      typeof toneMapping === 'string' &&
+      validToneMappingTypes.includes(toneMapping)
+    ) {
+      if (THREE[toneMapping]) {
+        renderer.toneMapping = THREE[toneMapping];
+        console.log('Ustawiono tone mapping:', toneMapping);
+      } else {
+        console.warn(
+          'Typ tone mappingu nie istnieje w THREE.js:',
+          toneMapping,
+          'używam NoToneMapping'
+        );
+        renderer.toneMapping = THREE.NoToneMapping;
+      }
+    } else {
+      console.warn(
+        'Nieznany typ tone mappingu:',
+        toneMapping,
+        'używam NoToneMapping'
+      );
+      renderer.toneMapping = THREE.NoToneMapping;
+    }
+
     renderer.toneMappingExposure =
       performanceProfile?.renderer?.toneMappingExposure || 1.0;
-    renderer.outputEncoding =
-      THREE[performanceProfile?.renderer?.outputEncoding] || THREE.sRGBEncoding;
+
+    // Konfiguracja output encoding
+    const outputEncoding = performanceProfile?.renderer?.outputEncoding;
+    console.log('Próba ustawienia outputEncoding:', outputEncoding);
+
+    // Sprawdź czy wartość istnieje w THREE.js
+    const validOutputEncodingTypes = [
+      'LinearEncoding',
+      'sRGBEncoding',
+      'GammaEncoding',
+      'RGBEEncoding',
+      'LogLuvEncoding',
+      'RGBM7Encoding',
+      'RGBM16Encoding',
+      'RGBDEncoding',
+      'BasicDepthPacking',
+      'RGBADepthPacking',
+    ];
+    if (
+      typeof outputEncoding === 'string' &&
+      validOutputEncodingTypes.includes(outputEncoding)
+    ) {
+      if (THREE[outputEncoding]) {
+        renderer.outputEncoding = THREE[outputEncoding];
+        console.log('Ustawiono output encoding:', outputEncoding);
+      } else {
+        console.warn(
+          'Typ output encoding nie istnieje w THREE.js:',
+          outputEncoding,
+          'używam sRGBEncoding'
+        );
+        renderer.outputEncoding = THREE.sRGBEncoding;
+      }
+    } else {
+      console.warn(
+        'Nieznany typ output encoding:',
+        outputEncoding,
+        'używam sRGBEncoding'
+      );
+      renderer.outputEncoding = THREE.sRGBEncoding;
+    }
+
+    // Konfiguracja output color space
+    const outputColorSpace = performanceProfile?.renderer?.outputColorSpace;
+    console.log('Próba ustawienia outputColorSpace:', outputColorSpace);
+
+    // Sprawdź czy wartość jest poprawna
+    const validColorSpaces = ['srgb', 'srgb-linear', 'display-p3', 'rec709'];
+    if (
+      typeof outputColorSpace === 'string' &&
+      validColorSpaces.includes(outputColorSpace.toLowerCase())
+    ) {
+      renderer.outputColorSpace = outputColorSpace;
+      console.log('Ustawiono output color space:', outputColorSpace);
+    } else {
+      console.warn(
+        'Nieznany output color space:',
+        outputColorSpace,
+        'używam domyślnego'
+      );
+      renderer.outputColorSpace = 'srgb';
+    }
+
+    // Ustawienie pozostałych parametrów renderera
     renderer.physicallyCorrectLights =
-      performanceProfile?.renderer?.physicallyCorrectLights !== undefined
-        ? performanceProfile.renderer.physicallyCorrectLights
-        : true;
+      performanceProfile?.renderer?.physicallyCorrectLights || false;
     renderer.logarithmicDepthBuffer =
       performanceProfile?.renderer?.logarithmicDepthBuffer || false;
+    renderer.precision = performanceProfile?.renderer?.precision || 'highp';
+    renderer.powerPreference =
+      performanceProfile?.renderer?.powerPreference || 'default';
+    renderer.stencil = performanceProfile?.renderer?.stencil || false;
+    renderer.failIfMajorPerformanceCaveat =
+      performanceProfile?.renderer?.failIfMajorPerformanceCaveat || false;
+    renderer.depth = performanceProfile?.renderer?.depth || true;
+    renderer.premultipliedAlpha =
+      performanceProfile?.renderer?.premultipliedAlpha || true;
+    renderer.preserveDrawingBuffer =
+      performanceProfile?.renderer?.preserveDrawingBuffer || false;
+    renderer.xrCompatible = performanceProfile?.renderer?.xrCompatible || false;
+    renderer.autoClear = performanceProfile?.renderer?.autoClear || true;
+    renderer.alpha = performanceProfile?.renderer?.alpha || false;
 
     // Inicjalizacja LightManager
     lightManager = new LightManager(scene);
@@ -527,7 +667,9 @@ async function initBasicComponents() {
     camera.position.set(50, 5, 0);
 
     // Inicjalizacja renderera
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({
+      antialias: performanceProfile?.renderer?.antialias || false,
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
@@ -552,8 +694,41 @@ async function initBasicComponents() {
     // Konfiguracja shadowMap
     if (performanceProfile?.renderer?.shadowMap?.enabled === true) {
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type =
-        THREE[performanceProfile.renderer.shadowMap.type] || THREE.PCFShadowMap;
+
+      // Lepsza obsługa typu mapy cieni
+      const shadowMapType = performanceProfile.renderer.shadowMap.type;
+      console.log('Próba ustawienia shadowMap.type:', shadowMapType);
+
+      // Sprawdź czy wartość istnieje w THREE.js
+      const validShadowMapTypes = [
+        'BasicShadowMap',
+        'PCFShadowMap',
+        'PCFSoftShadowMap',
+        'VSMShadowMap',
+      ];
+      if (
+        typeof shadowMapType === 'string' &&
+        validShadowMapTypes.includes(shadowMapType)
+      ) {
+        if (THREE[shadowMapType]) {
+          renderer.shadowMap.type = THREE[shadowMapType];
+          console.log('Ustawiono typ mapy cieni:', shadowMapType);
+        } else {
+          console.warn(
+            'Typ mapy cieni nie istnieje w THREE.js:',
+            shadowMapType,
+            'używam PCFShadowMap'
+          );
+          renderer.shadowMap.type = THREE.PCFShadowMap;
+        }
+      } else {
+        console.warn(
+          'Nieznany typ mapy cieni:',
+          shadowMapType,
+          'używam PCFShadowMap'
+        );
+        renderer.shadowMap.type = THREE.PCFShadowMap;
+      }
 
       // Inicjalizacja mapSize jeśli nie istnieje
       if (!renderer.shadowMap.mapSize) {
@@ -575,18 +750,125 @@ async function initBasicComponents() {
     }
 
     // Konfiguracja tone mapping
-    renderer.toneMapping =
-      THREE[performanceProfile?.renderer?.toneMapping] || THREE.NoToneMapping;
+    const toneMapping = performanceProfile?.renderer?.toneMapping;
+    console.log('Próba ustawienia toneMapping:', toneMapping);
+
+    // Sprawdź czy wartość istnieje w THREE.js
+    const validToneMappingTypes = [
+      'NoToneMapping',
+      'LinearToneMapping',
+      'ReinhardToneMapping',
+      'CineonToneMapping',
+      'ACESFilmicToneMapping',
+    ];
+    if (
+      typeof toneMapping === 'string' &&
+      validToneMappingTypes.includes(toneMapping)
+    ) {
+      if (THREE[toneMapping]) {
+        renderer.toneMapping = THREE[toneMapping];
+        console.log('Ustawiono tone mapping:', toneMapping);
+      } else {
+        console.warn(
+          'Typ tone mappingu nie istnieje w THREE.js:',
+          toneMapping,
+          'używam NoToneMapping'
+        );
+        renderer.toneMapping = THREE.NoToneMapping;
+      }
+    } else {
+      console.warn(
+        'Nieznany typ tone mappingu:',
+        toneMapping,
+        'używam NoToneMapping'
+      );
+      renderer.toneMapping = THREE.NoToneMapping;
+    }
+
     renderer.toneMappingExposure =
       performanceProfile?.renderer?.toneMappingExposure || 1.0;
-    renderer.outputEncoding =
-      THREE[performanceProfile?.renderer?.outputEncoding] || THREE.sRGBEncoding;
+
+    // Konfiguracja output encoding
+    const outputEncoding = performanceProfile?.renderer?.outputEncoding;
+    console.log('Próba ustawienia outputEncoding:', outputEncoding);
+
+    // Sprawdź czy wartość istnieje w THREE.js
+    const validOutputEncodingTypes = [
+      'LinearEncoding',
+      'sRGBEncoding',
+      'GammaEncoding',
+      'RGBEEncoding',
+      'LogLuvEncoding',
+      'RGBM7Encoding',
+      'RGBM16Encoding',
+      'RGBDEncoding',
+      'BasicDepthPacking',
+      'RGBADepthPacking',
+    ];
+    if (
+      typeof outputEncoding === 'string' &&
+      validOutputEncodingTypes.includes(outputEncoding)
+    ) {
+      if (THREE[outputEncoding]) {
+        renderer.outputEncoding = THREE[outputEncoding];
+        console.log('Ustawiono output encoding:', outputEncoding);
+      } else {
+        console.warn(
+          'Typ output encoding nie istnieje w THREE.js:',
+          outputEncoding,
+          'używam sRGBEncoding'
+        );
+        renderer.outputEncoding = THREE.sRGBEncoding;
+      }
+    } else {
+      console.warn(
+        'Nieznany typ output encoding:',
+        outputEncoding,
+        'używam sRGBEncoding'
+      );
+      renderer.outputEncoding = THREE.sRGBEncoding;
+    }
+
+    // Konfiguracja output color space
+    const outputColorSpace = performanceProfile?.renderer?.outputColorSpace;
+    console.log('Próba ustawienia outputColorSpace:', outputColorSpace);
+
+    // Sprawdź czy wartość jest poprawna
+    const validColorSpaces = ['srgb', 'srgb-linear', 'display-p3', 'rec709'];
+    if (
+      typeof outputColorSpace === 'string' &&
+      validColorSpaces.includes(outputColorSpace.toLowerCase())
+    ) {
+      renderer.outputColorSpace = outputColorSpace;
+      console.log('Ustawiono output color space:', outputColorSpace);
+    } else {
+      console.warn(
+        'Nieznany output color space:',
+        outputColorSpace,
+        'używam domyślnego'
+      );
+      renderer.outputColorSpace = 'srgb';
+    }
+
+    // Ustawienie pozostałych parametrów renderera
     renderer.physicallyCorrectLights =
-      performanceProfile?.renderer?.physicallyCorrectLights !== undefined
-        ? performanceProfile.renderer.physicallyCorrectLights
-        : true;
+      performanceProfile?.renderer?.physicallyCorrectLights || false;
     renderer.logarithmicDepthBuffer =
       performanceProfile?.renderer?.logarithmicDepthBuffer || false;
+    renderer.precision = performanceProfile?.renderer?.precision || 'highp';
+    renderer.powerPreference =
+      performanceProfile?.renderer?.powerPreference || 'default';
+    renderer.stencil = performanceProfile?.renderer?.stencil || false;
+    renderer.failIfMajorPerformanceCaveat =
+      performanceProfile?.renderer?.failIfMajorPerformanceCaveat || false;
+    renderer.depth = performanceProfile?.renderer?.depth || true;
+    renderer.premultipliedAlpha =
+      performanceProfile?.renderer?.premultipliedAlpha || true;
+    renderer.preserveDrawingBuffer =
+      performanceProfile?.renderer?.preserveDrawingBuffer || false;
+    renderer.xrCompatible = performanceProfile?.renderer?.xrCompatible || false;
+    renderer.autoClear = performanceProfile?.renderer?.autoClear || true;
+    renderer.alpha = performanceProfile?.renderer?.alpha || false;
 
     return true;
   } catch (error) {
