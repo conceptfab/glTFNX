@@ -249,7 +249,15 @@ export class SceneBuilder {
 
           envMap.encoding = colorSpace;
           this.config.scene.environment = envMap;
-          this.config.scene.background = envMap;
+
+          // Ustaw kolor tła niezależnie od środowiska
+          if (sceneProfile?.background?.color) {
+            this.config.scene.background = new THREE.Color(
+              sceneProfile.background.color
+            );
+          } else {
+            this.config.scene.background = new THREE.Color(0x000000); // Domyślny kolor tła
+          }
 
           console.log('SceneBuilder: Środowisko skonfigurowane pomyślnie');
         } catch (error) {
