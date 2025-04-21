@@ -1,7 +1,7 @@
 {
   "id": "profile-medium",
-  "name": "Średnia jakość (FXAA)",
-  "description": "Profil zoptymalizowany pod FXAA dla typowych komputerów biurowych i laptopów",
+  "name": "Średnia jakość",
+  "description": "Zbalansowany profil dla większości urządzeń",
   "category": "profile",
   "renderer": {
     "antialias": false,
@@ -32,6 +32,32 @@
     },
     "physicallyCorrectLights": true,
     "pixelRatio": 1.0
+  },
+  "contactShadows": {
+    "enabled": true,
+    "quality": "medium",
+    "blur": {
+      "amount": 2.5,
+      "samples": 4
+    },
+    "darkness": 1.0,
+    "opacity": 1.0,
+    "resolution": {
+      "width": 512,
+      "height": 512
+    }
+  },
+  "floor": {
+    "enabled": true,
+    "quality": "medium",
+    "color": "#ffffff",
+    "opacity": 1.0,
+    "segments": 128,
+    "material": {
+      "type": "basic",
+      "roughness": 0.5,
+      "metalness": 0.0
+    }
   },
   "floorQuality": {
     "segments": 128

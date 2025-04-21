@@ -33,6 +33,32 @@
     "physicallyCorrectLights": false,
     "pixelRatio": 1.0
   },
+  "contactShadows": {
+    "enabled": false,
+    "quality": "low",
+    "blur": {
+      "amount": 1.5,
+      "samples": 2
+    },
+    "darkness": 1.0,
+    "opacity": 1.0,
+    "resolution": {
+      "width": 256,
+      "height": 256
+    }
+  },
+  "floor": {
+    "enabled": true,
+    "quality": "low",
+    "color": "#ffffff",
+    "opacity": 1.0,
+    "segments": 32,
+    "material": {
+      "type": "basic",
+      "roughness": 0.5,
+      "metalness": 0.0
+    }
+  },
   "floorQuality": {
     "segments": 32
   },

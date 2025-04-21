@@ -1,4 +1,4 @@
-- light manager dodaje światła
+- light manager dodaje światła dodatkowe!!! enviroment
 - swiatło enviroment
 - model manager
 - cienie

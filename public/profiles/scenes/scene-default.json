@@ -38,17 +38,17 @@
   },
   "cameras": {
     "default": {
-      "fov": 45,
-      "near": 0.25,
-      "far": 2000,
+      "fov": 50,
+      "near": 0,
+      "far": 100,
       "position": {
-        "x": 50,
-        "y": 5,
-        "z": 0
+        "x": 0.5,
+        "y": 1,
+        "z": 2
       },
       "target": {
         "x": 0,
-        "y": 5,
+        "y": 1,
         "z": 0
       }
     },
@@ -57,13 +57,13 @@
       "near": 0.25,
       "far": 2000,
       "position": {
-        "x": -50,
-        "y": 5,
-        "z": 0
+        "x": 0.5,
+        "y": 1,
+        "z": 2
       },
       "target": {
         "x": 0,
-        "y": 5,
+        "y": 1,
         "z": 0
       }
     },
@@ -84,7 +84,8 @@
     }
   },
   "background": {
-    "color": 8421504
+    "color": "#ffffff",
+    "opacity": 1.0
   },
   "environment": {
     "enabled": true,
@@ -108,7 +109,7 @@
       "color": "#ffffff"
     },
     "hemisphere": {
-      "enabled": true,
+      "enabled": false,
       "intensity": 1.0,
       "skyColor": "#87CEEB",
       "groundColor": "#8B4513"
@@ -143,41 +144,28 @@
     "visible": false
   },
   "floor": {
-    "size": 125,
-    "segments": 128,
-    "visible": false,
-    "material": {
-      "type": "MeshPhysicalMaterial",
-      "color": 6381921,
-      "metalness": 0.0,
-      "roughness": 1,
-      "envMapIntensity": 0.7,
-      "clearcoat": 0.4,
-      "clearcoatRoughness": 0.2,
-      "opacity": 0.95,
-      "reflectivity": 0.3,
-      "transmission": 0.0,
-      "thickness": 0.5,
-      "transparent": true,
-      "side": "FrontSide",
-      "alphaTest": 0.0,
-      "depthWrite": true,
-      "depthTest": true
+    "type": "contact",
+    "enabled": true,
+    "position": {
+      "y": -0.3
     },
-    "texture": {
-      "file": "textures/opacity_floor.jpg",
-      "repeat": 1,
-      "filter": "linear",
-      "anisotropy": "max",
-      "wrap": "repeat",
-      "encoding": "sRGB",
-      "mapping": "uv",
-      "useAlpha": true,
-      "alphaChannel": {
-        "repeat": 1,
-        "filter": "linear"
-      }
+    "material": {
+      "type": "physical",
+      "color": "#ffffff",
+      "opacity": 1.0,
+      "roughness": 0.5,
+      "metalness": 0.0
     }
+  },
+  "shadows": {
+    "type": "contact",
+    "enabled": true,
+    "blur": {
+      "amount": 3.5,
+      "samples": 8
+    },
+    "darkness": 1.0,
+    "opacity": 1.0
   },
   "controls": {
     "enableDamping": true,

@@ -1,117 +1,116 @@
-# Raport funkcjonalności ModelManager.js
+# Analiza profili w systemie glTFNX
 
-## 1. Konstruktor (constructor)
+## Profile Scen (scene-default.json)
 
-- Inicjalizuje główne komponenty sceny 3D / za to ma odpowiadac scene-buider, - do usuniecia
-- Ustawia szare tło sceny (0x808080) - do usuniecia
-- Tworzy loader GLTF do ładowania modeli 3D
-- Inicjalizuje mapę modeli i event listenerów
-- Konfiguruje podstawowe ustawienia (dozwolone rozszerzenia plików, maksymalny rozmiar)
-- Dodaje siatkę pomocniczą do sceny - do usuniecia
-- Konfiguruje kamerę perspektywiczną - do usuniecia
-- Ustawia renderer WebGL z obsługą antyaliasingu - do usuniecia
-- Konfiguruje kontrolę kamery (OrbitControls) - do usuniecia
-- Inicjalizuje event listenery - do usuniecia
-- Uruchamia pętlę animacji - do usuniecia
+### 1. Podstawowe informacje
 
-## 2. animate()
+- id
+- name
+- description
+- category
 
-- Zarządza pętlą renderowania sceny - do usuniecia
-- Aktualizuje kontrolę kamery - do usuniecia
-- Renderuje scenę z aktualną kamerą - do usuniecia
+### 2. Konfiguracja renderera
 
-## 3. cleanupEventListeners()
+- toneMapping
+- toneMappingExposure
+- outputEncoding
+- alpha
 
-- Usuwa wszystkie zarejestrowane event listenery
-- Czyści mapę event listenerów
+### 3. Postprocessing
 
-## 4. setupEventListeners()
+- EffectComposer
+- RenderPass
+- ShaderPass
+- UnrealBloomPass (parametry: strength, radius, threshold)
+- SSAOPass (parametry: radius, intensity, bias)
+- FXAAPass
+- BokehPass (parametry: focus, aperture, maxblur)
 
-- Czyści stare event listenery
-- Dodaje nowy listener dla zdarzenia 'modelLoadRequested'
-- Obsługuje żądania ładowania modeli
+### 4. Kamery
 
-## 5. handleFileSelect(file)
+- default, back, top
+- Parametry każdej kamery: fov, near, far, position, target
 
-- Obsługuje wybór pliku przez użytkownika
-- Sprawdza format pliku (.gltf lub .glb)
-- Wyświetla błąd w przypadku nieprawidłowego formatu
-- Pokazuje ekran ładowania
-- Ładuje model i dodaje go do sceny
-- Obsługuje błędy podczas ładowania
+### 5. Tło i środowisko
 
-## 6. loadModel(file)
+- background color
+- environment (path, files, colorSpace)
 
-- Ładuje model 3D z pliku lub ścieżki - sciezka w pliku index.json!!!
-- Obsługuje dwa tryby ładowania:
+### 6. Oświetlenie
 
-  - Ze ścieżki (używając loadModelFromPath) - sciezka w pliku index.json!!!
+- ambient light (intensity, color)
+- hemisphere light (intensity, skyColor, groundColor)
+- directional lights (color, intensity, position, helper, castShadow)
 
-- Wyświetla postęp ładowania
-- Obsługuje błędy podczas ładowania
+### 7. Elementy pomocnicze
 
-## 7. addModelToScene(model)
+- axis (length, visible)
+- grid (size, divisions, visible)
+- floor (size, segments, visible, material, texture)
 
-- Dodaje model do sceny
-- Resetuje skalę sceny
-- Usuwa poprzedni model jeśli istnieje
-- Optymalizuje materiały i tekstury modelu
-- Dodaje domyślne materiały jeśli brak
-- Ogranicza liczbę tekstur do 8 na materiał
-- Optymalizuje ustawienia tekstur
+### 8. Sterowanie
 
-## 8. removeModel(modelPath)
+- enableDamping
+- dampingFactor
+- rotateSpeed
+- panSpeed
+- zoomSpeed
+- minDistance, maxDistance
+- minPolarAngle, maxPolarAngle
+- enablePan, enableRotate, enableZoom
 
-- Usuwa model ze sceny
-- Aktualizuje stan menedżera modeli
+## Profile Wydajności (profile-high.json)
 
-## 9. getCurrentModel()
+### 1. Podstawowe informacje
 
-- Zwraca aktualnie wyświetlany model
+- id
+- name
+- description
+- category
 
-## 10. getAllModels()
+### 2. Konfiguracja renderera
 
-- Zwraca wszystkie załadowane modele
+- antialias
+- precision
+- powerPreference
+- failIfMajorPerformanceCaveat
+- depth, stencil
+- premultipliedAlpha
+- preserveDrawingBuffer
+- xrCompatible
+- autoClear
+- logarithmicDepthBuffer
+- toneMapping
+- toneMappingExposure
+- outputEncoding
+- alpha
+- shadowMap (enabled, type, mapSize, blurSamples, bias, radius)
+- physicallyCorrectLights
+- pixelRatio
 
-## 11. clearAllModels()
+### 3. Jakość podłogi
 
-- Usuwa wszystkie modele ze sceny
-- Czyści mapę modeli
-- Resetuje aktualny model
+- segments
 
-## 12. exportModel(format)
+### 4. Postprocessing
 
-- Eksportuje aktualny model do formatu GLB lub GLTF - po co to jest? do usunięcia!!!
-- Obsługuje błędy podczas eksportu - po co to jest? do usunięcia!!!
+- enabled
+- bloom
+- ssao
+- fxaa
+- smaa
 
-## 13. showLoading() / hideLoading()
+### 5. Jakość
 
-- Pokazuje/ukrywa ekran ładowania
+- shadows
+- textures
+- resolution (width, height)
+- anisotropy
 
-## 14. showError(error) / hideError()
+## Kluczowe różnice między profilami
 
-- Wyświetla/ukrywa komunikaty błędów
-
-## 15. loadModelFromPath(path)
-
-- Ładuje model ze ścieżki
-- Obsługuje konfigurację modelu
-- Centruje kamerę na modelu - kamera jest jest pobierana z profilu sceny!!!!
-
-## 16. loadModelConfig(modelDir)
-
-- Wczytuje konfigurację modelu z pliku
-
-## 17. applyModelConfig(model, config)
-
-- Stosuje konfigurację do modelu
-- Ustawia pozycję, skalę i rotację
-
-## 18. centerCameraOnModel(model) -  funkcje się duplikuja, do sprawdzenia
-
-- Centruje kamerę na modelu
-- Ustawia odpowiednią odległość kamery
-
-## 19. resetSceneScale()
-
-- Resetuje skalę sceny do wartości domyślnych
+1. Profile scen zawierają szczegółowe konfiguracje wizualne (oświetlenie, kamery, tło, elementy pomocnicze)
+2. Profile wydajności skupiają się na parametrach technicznych (jakość renderowania, antyaliasing, cienie)
+3. Profile scen zawierają konfigurację sterowania, której nie ma w profilach wydajności
+4. Profile wydajności zawierają bardziej szczegółowe parametry renderera i jakości
+5. Profile scen zawierają konfigurację środowiska i tekstur, której nie ma w profilach wydajności
