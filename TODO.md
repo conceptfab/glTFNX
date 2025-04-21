@@ -1,3 +1,5 @@
+- kamery domyslne
+
 - light manager dodaje światła dodatkowe!!! enviroment
 - swiatło enviroment
 - model manager

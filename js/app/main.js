@@ -61,33 +61,39 @@ let ui = null;
 
 // Funkcja do przełączania widoków kamery
 function setCameraView(view) {
-  if (!camera || !controls) return;
+  if (!camera || !controls || !sceneProfile?.cameras?.[view]) return;
 
-  const defaultPosition = new THREE.Vector3(50, 5, 0);
-  const defaultTarget = new THREE.Vector3(0, 5, 0);
+  const cameraConfig = sceneProfile.cameras[view];
 
-  switch (view) {
-    case 'default':
-      camera.position.copy(defaultPosition);
-      controls.target.copy(defaultTarget);
-      break;
-    case 'back':
-      camera.position.set(-50, 5, 0);
-      controls.target.copy(defaultTarget);
-      break;
-    case 'top':
-      camera.position.set(0, 50, 0);
-      controls.target.copy(defaultTarget);
-      break;
-  }
+  // Ustawienie pozycji kamery
+  camera.position.set(
+    cameraConfig.position.x,
+    cameraConfig.position.y,
+    cameraConfig.position.z
+  );
+
+  // Ustawienie celu kamery
+  const target = new THREE.Vector3(
+    cameraConfig.target.x,
+    cameraConfig.target.y,
+    cameraConfig.target.z
+  );
+  controls.target.copy(target);
+
+  // Ustawienie parametrów kamery
+  camera.fov = cameraConfig.fov;
+  camera.near = cameraConfig.near;
+  camera.far = cameraConfig.far;
+  camera.updateProjectionMatrix();
 
   controls.update();
 }
 
 // Funkcja do aktualizacji stanu przycisków kamery
 function updateCameraButtons(activeView) {
-  const views = ['default', 'back', 'top'];
-  views.forEach((view) => {
+  if (!sceneProfile?.cameras) return;
+
+  Object.keys(sceneProfile.cameras).forEach((view) => {
     const button = document.getElementById(`${view}View`);
     if (button) {
       if (view === activeView) {
@@ -101,8 +107,9 @@ function updateCameraButtons(activeView) {
 
 // Inicjalizacja obsługi zdarzeń dla przycisków kamery
 function initCameraButtons() {
-  const views = ['default', 'back', 'top'];
-  views.forEach((view) => {
+  if (!sceneProfile?.cameras) return;
+
+  Object.keys(sceneProfile.cameras).forEach((view) => {
     const button = document.getElementById(`${view}View`);
     if (button) {
       button.addEventListener('click', () => {
@@ -328,6 +335,7 @@ async function init() {
       debugManager.setStats(stats);
       debugManager.setModelManager(modelManager);
       debugManager.setSceneBuilder(sceneBuilder);
+      debugManager.setSceneProfile(sceneProfile);
       await debugManager.init();
 
       // Aktualizuj panel debug po inicjalizacji
@@ -516,6 +524,9 @@ async function init() {
       performanceProfile = profiles.performanceProfile;
       sceneProfile = profiles.sceneProfile;
 
+      // Inicjalizacja przycisków kamery
+      initCameraButtons();
+
       // Zastosuj parametry renderera z profilu wydajności
       if (performanceProfile?.renderer) {
         const rendererParams = performanceProfile.renderer;
@@ -627,12 +638,32 @@ async function initBasicComponents() {
 
     // Inicjalizacja kamery
     camera = new THREE.PerspectiveCamera(
-      75,
+      sceneProfile?.cameras?.default?.fov || 75,
       window.innerWidth / window.innerHeight,
-      0.1,
-      1000
+      sceneProfile?.cameras?.default?.near || 0.1,
+      sceneProfile?.cameras?.default?.far || 1000
     );
-    camera.position.set(50, 5, 0);
+
+    // Ustawienie pozycji kamery z profilu
+    if (sceneProfile?.cameras?.default) {
+      const cameraConfig = sceneProfile.cameras.default;
+      camera.position.set(
+        cameraConfig.position.x,
+        cameraConfig.position.y,
+        cameraConfig.position.z
+      );
+
+      // Ustawienie celu kamery
+      const target = new THREE.Vector3(
+        cameraConfig.target.x,
+        cameraConfig.target.y,
+        cameraConfig.target.z
+      );
+      camera.lookAt(target);
+    } else {
+      // Domyślne ustawienia tylko jeśli nie ma profilu
+      camera.position.set(50, 5, 0);
+    }
 
     // Inicjalizacja renderera
     renderer = new THREE.WebGLRenderer({

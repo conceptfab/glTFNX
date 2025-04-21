@@ -40,12 +40,29 @@ init();
 
 function init() {
   camera = new THREE.PerspectiveCamera(
-    50,
+    sceneProfile?.cameras?.default?.fov || 50,
     window.innerWidth / window.innerHeight,
-    0.1,
-    100
+    sceneProfile?.cameras?.default?.near || 0.1,
+    sceneProfile?.cameras?.default?.far || 100
   );
-  camera.position.set(0.5, 1, 2);
+
+  if (sceneProfile?.cameras?.default) {
+    const cameraConfig = sceneProfile.cameras.default;
+    camera.position.set(
+      cameraConfig.position.x,
+      cameraConfig.position.y,
+      cameraConfig.position.z
+    );
+
+    const target = new THREE.Vector3(
+      cameraConfig.target.x,
+      cameraConfig.target.y,
+      cameraConfig.target.z
+    );
+    camera.lookAt(target);
+  } else {
+    camera.position.set(0.5, 1, 2);
+  }
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);

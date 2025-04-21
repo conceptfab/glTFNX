@@ -38,6 +38,7 @@ export class DebugManager {
       stats: null,
       modelManager: null,
       sceneBuilder: null,
+      sceneProfile: null,
     };
   }
 
@@ -79,6 +80,11 @@ export class DebugManager {
     console.log('🔧 DebugManager: Ustawiono sceneBuilder');
   }
 
+  setSceneProfile(sceneProfile) {
+    this.state.sceneProfile = sceneProfile;
+    console.log('🔧 DebugManager: Ustawiono sceneProfile');
+  }
+
   // Inicjalizacja debugowania
   async init() {
     try {
@@ -107,7 +113,7 @@ export class DebugManager {
 
   // Ustawienie domyślnych wartości
   setDefaultValues() {
-    // 1. Ustawienie widoczności
+    // 1. Resetowanie widoczności
     this.state.isLightingVisible = false;
     this.state.isAxisVisible = false;
     this.state.isBoundingBoxVisible = false;
@@ -120,9 +126,20 @@ export class DebugManager {
     }
 
     // 3. Ustawienie kamery
-    if (this.state.camera) {
-      this.state.camera.position.set(50, 5, 0);
-      this.state.camera.lookAt(0, 5, 0);
+    if (this.state.camera && this.state.sceneProfile?.cameras?.default) {
+      const cameraConfig = this.state.sceneProfile.cameras.default;
+      this.state.camera.position.set(
+        cameraConfig.position.x,
+        cameraConfig.position.y,
+        cameraConfig.position.z
+      );
+
+      const target = new THREE.Vector3(
+        cameraConfig.target.x,
+        cameraConfig.target.y,
+        cameraConfig.target.z
+      );
+      this.state.camera.lookAt(target);
     }
 
     // 4. Ustawienie kontrolek
@@ -272,8 +289,22 @@ export class DebugManager {
       return;
     }
 
-    this.state.camera.position.set(50, 5, 0);
-    this.state.camera.lookAt(0, 5, 0);
+    if (this.state.sceneProfile?.cameras?.default) {
+      const cameraConfig = this.state.sceneProfile.cameras.default;
+      this.state.camera.position.set(
+        cameraConfig.position.x,
+        cameraConfig.position.y,
+        cameraConfig.position.z
+      );
+
+      const target = new THREE.Vector3(
+        cameraConfig.target.x,
+        cameraConfig.target.y,
+        cameraConfig.target.z
+      );
+      this.state.camera.lookAt(target);
+    }
+
     this.state.controls.reset();
   }
 

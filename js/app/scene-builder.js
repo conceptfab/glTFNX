@@ -271,6 +271,18 @@ export class SceneBuilder {
         }
       }
 
+      // Dodanie podłogi
+      const floorGeometry = new THREE.BoxGeometry(5, 0.25, 5);
+      const floorMaterial = new THREE.MeshStandardMaterial({
+        color: 0x808080,
+        roughness: 0.8,
+        metalness: 0.2,
+      });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.position.y = -0.125; // Połowa wysokości, aby górna powierzchnia była w 0,0,0
+      floor.receiveShadow = true;
+      this.config.scene.add(floor);
+
       // Walidacja profili
       if (!performanceProfile || !sceneProfile) {
         throw new Error('Brak wymaganych profili');
@@ -508,6 +520,41 @@ export class SceneBuilder {
         );
       } else {
         console.log('SceneBuilder: Oświetlenie wyłączone w konfiguracji');
+      }
+
+      // Konfiguracja kamery
+      if (sceneProfile?.cameras?.default) {
+        const cameraConfig = sceneProfile.cameras.default;
+        const camera = this.config.camera;
+
+        // Ustawienie parametrów kamery
+        camera.fov = cameraConfig.fov;
+        camera.near = cameraConfig.near;
+        camera.far = cameraConfig.far;
+
+        // Ustawienie pozycji kamery
+        camera.position.set(
+          cameraConfig.position.x,
+          cameraConfig.position.y,
+          cameraConfig.position.z
+        );
+
+        // Ustawienie celu kamery
+        const target = new THREE.Vector3(
+          cameraConfig.target.x,
+          cameraConfig.target.y,
+          cameraConfig.target.z
+        );
+        camera.lookAt(target);
+
+        // Aktualizacja projekcji
+        camera.updateProjectionMatrix();
+
+        console.log('SceneBuilder: Kamera skonfigurowana z profilu:', {
+          position: camera.position,
+          target: target,
+          fov: camera.fov,
+        });
       }
 
       // Konfiguracja postprocessingu
