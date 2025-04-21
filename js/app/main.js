@@ -458,13 +458,19 @@ async function init() {
     renderer.toneMappingExposure =
       performanceProfile?.renderer?.toneMappingExposure || 1.0;
 
-    // Konfiguracja output encoding
-    const outputColorSpace =
-      performanceProfile?.renderer?.outputColorSpace || 'srgb';
-    console.log('Próba ustawienia outputColorSpace:', outputColorSpace);
-
-    // Ustawiamy outputColorSpace
-    renderer.outputColorSpace = outputColorSpace;
+    // Obsługa output encoding
+    const outputColorSpace = performanceProfile.renderer.outputColorSpace;
+    if (outputColorSpace) {
+      renderer.outputColorSpace = outputColorSpace;
+      console.log('Ustawiono output color space:', outputColorSpace);
+    } else {
+      console.warn(
+        'Nieznany lub niezdefiniowany typ output color space:',
+        outputColorSpace,
+        'używam srgb'
+      );
+      renderer.outputColorSpace = 'srgb';
+    }
 
     // Ustawiamy inne parametry renderera
     renderer.physicallyCorrectLights =
@@ -881,17 +887,17 @@ function setupScene(performanceProfile, sceneProfile) {
       performanceProfile.renderer.toneMappingExposure || 1.0;
 
     // Obsługa output encoding
-    const outputEncodingType = performanceProfile.renderer.outputEncoding;
-    if (outputEncodingType && THREE[outputEncodingType]) {
-      renderer.outputEncoding = THREE[outputEncodingType];
-      console.log('Ustawiono output encoding:', outputEncodingType);
+    const outputColorSpace = performanceProfile.renderer.outputColorSpace;
+    if (outputColorSpace) {
+      renderer.outputColorSpace = outputColorSpace;
+      console.log('Ustawiono output color space:', outputColorSpace);
     } else {
       console.warn(
-        'Nieznany lub niezdefiniowany typ output encoding:',
-        outputEncodingType,
-        'używam LinearEncoding'
+        'Nieznany lub niezdefiniowany typ output color space:',
+        outputColorSpace,
+        'używam srgb'
       );
-      renderer.outputEncoding = THREE.LinearEncoding;
+      renderer.outputColorSpace = 'srgb';
     }
   }
 
