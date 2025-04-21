@@ -60,6 +60,53 @@ export class DebugManager {
     console.log('🔧 DebugManager: Ustawiono camera');
   }
 
+  // Ustawienie konkretnych parametrów kamery
+  setCameraParams(params) {
+    if (!this.state.camera) {
+      console.warn('❌ DebugManager: Kamera nie jest zainicjalizowana');
+      return;
+    }
+
+    try {
+      // Ustawienie pozycji
+      this.state.camera.position.set(
+        params.position.x,
+        params.position.y,
+        params.position.z
+      );
+
+      // Ustawienie rotacji
+      this.state.camera.rotation.set(
+        params.rotation.x,
+        params.rotation.y,
+        params.rotation.z
+      );
+
+      // Ustawienie celu
+      if (params.target) {
+        this.state.camera.lookAt(
+          new THREE.Vector3(params.target.x, params.target.y, params.target.z)
+        );
+      }
+
+      // Ustawienie parametrów projekcji
+      if (params.fov) this.state.camera.fov = params.fov;
+      if (params.aspect) this.state.camera.aspect = params.aspect;
+      if (params.near) this.state.camera.near = params.near;
+      if (params.far) this.state.camera.far = params.far;
+
+      // Aktualizacja projekcji
+      this.state.camera.updateProjectionMatrix();
+
+      console.log('✅ DebugManager: Ustawiono parametry kamery:', params);
+    } catch (error) {
+      console.error(
+        '❌ DebugManager: Błąd podczas ustawiania parametrów kamery:',
+        error
+      );
+    }
+  }
+
   setControls(controls) {
     this.state.controls = controls;
     console.log('🔧 DebugManager: Ustawiono controls');
@@ -796,6 +843,48 @@ ${this.formatDifferences(report.differences)}
             allParamsSection,
             'Hemisphere kolor ziemi',
             sceneProfile.lighting.hemisphere.groundColor
+          );
+        }
+      }
+
+      // Informacje o kamerze
+      if (camera) {
+        const cameraSection = createSection('Kamera', 'camera-section');
+        container.appendChild(cameraSection);
+
+        // Pozycja
+        addInfo(
+          cameraSection,
+          'Pozycja',
+          `X: ${camera.position.x.toFixed(2)}, Y: ${camera.position.y.toFixed(
+            2
+          )}, Z: ${camera.position.z.toFixed(2)}`
+        );
+
+        // Rotacja
+        addInfo(
+          cameraSection,
+          'Rotacja',
+          `X: ${camera.rotation.x.toFixed(2)}, Y: ${camera.rotation.y.toFixed(
+            2
+          )}, Z: ${camera.rotation.z.toFixed(2)}`
+        );
+
+        // Parametry projekcji
+        addInfo(cameraSection, 'FOV', camera.fov.toFixed(2));
+        addInfo(cameraSection, 'Aspect', camera.aspect.toFixed(2));
+        addInfo(cameraSection, 'Near', camera.near.toFixed(2));
+        addInfo(cameraSection, 'Far', camera.far.toFixed(2));
+
+        // Cel kamery (jeśli są dostępne OrbitControls)
+        if (this.state.controls) {
+          const target = this.state.controls.target;
+          addInfo(
+            cameraSection,
+            'Cel',
+            `X: ${target.x.toFixed(2)}, Y: ${target.y.toFixed(
+              2
+            )}, Z: ${target.z.toFixed(2)}`
           );
         }
       }
