@@ -17,7 +17,7 @@
     "logarithmicDepthBuffer": false,
     "toneMapping": "NoToneMapping",
     "toneMappingExposure": 1.0,
-    "outputEncoding": "sRGBEncoding",
+    "outputColorSpace": "srgb",
     "alpha": true,
     "shadowMap": {
       "enabled": false,
