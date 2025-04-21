@@ -849,13 +849,10 @@ ${this.formatDifferences(report.differences)}
 
       // Informacje o kamerze
       if (camera) {
-        const cameraSection = createSection('Kamera', 'camera-section');
-        container.appendChild(cameraSection);
-
         // Pozycja
         addInfo(
-          cameraSection,
-          'Pozycja',
+          allParamsSection,
+          'Pozycja kamery',
           `X: ${camera.position.x.toFixed(2)}, Y: ${camera.position.y.toFixed(
             2
           )}, Z: ${camera.position.z.toFixed(2)}`
@@ -863,25 +860,25 @@ ${this.formatDifferences(report.differences)}
 
         // Rotacja
         addInfo(
-          cameraSection,
-          'Rotacja',
+          allParamsSection,
+          'Rotacja kamery',
           `X: ${camera.rotation.x.toFixed(2)}, Y: ${camera.rotation.y.toFixed(
             2
           )}, Z: ${camera.rotation.z.toFixed(2)}`
         );
 
         // Parametry projekcji
-        addInfo(cameraSection, 'FOV', camera.fov.toFixed(2));
-        addInfo(cameraSection, 'Aspect', camera.aspect.toFixed(2));
-        addInfo(cameraSection, 'Near', camera.near.toFixed(2));
-        addInfo(cameraSection, 'Far', camera.far.toFixed(2));
+        addInfo(allParamsSection, 'FOV kamery', camera.fov.toFixed(2));
+        addInfo(allParamsSection, 'Aspect kamery', camera.aspect.toFixed(2));
+        addInfo(allParamsSection, 'Near kamery', camera.near.toFixed(2));
+        addInfo(allParamsSection, 'Far kamery', camera.far.toFixed(2));
 
         // Cel kamery (jeśli są dostępne OrbitControls)
         if (this.state.controls) {
           const target = this.state.controls.target;
           addInfo(
-            cameraSection,
-            'Cel',
+            allParamsSection,
+            'Cel kamery',
             `X: ${target.x.toFixed(2)}, Y: ${target.y.toFixed(
               2
             )}, Z: ${target.z.toFixed(2)}`

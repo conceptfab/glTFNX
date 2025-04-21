@@ -86,6 +86,17 @@ export class UI {
         if (leftPanel) {
           leftPanel.classList.toggle('show');
           this.state.panels.left.visible = !this.state.panels.left.visible;
+
+          // Przywróć panel profili jeśli był widoczny przed ukryciem lewego panelu
+          if (
+            this.state.panels.left.visible &&
+            this.state.panels.profiles.visible
+          ) {
+            const profilesPanel = document.querySelector('.profiles-panel');
+            if (profilesPanel) {
+              profilesPanel.classList.add('show');
+            }
+          }
         }
       });
     }
@@ -523,9 +534,16 @@ export class UI {
   toggleProfilesPanel() {
     const profilesPanel = document.querySelector('.profiles-panel');
     if (profilesPanel) {
-      profilesPanel.classList.toggle('hidden');
-      this.state.panels.profiles.visible =
-        !profilesPanel.classList.contains('hidden');
+      profilesPanel.classList.toggle('show');
+      this.state.panels.profiles.visible = !this.state.panels.profiles.visible;
+
+      // Aktualizuj stan przycisku
+      if (this.elements.toggleButtons.profiles) {
+        this.elements.toggleButtons.profiles.classList.toggle(
+          'rotated',
+          this.state.panels.profiles.visible
+        );
+      }
     }
   }
 
@@ -533,8 +551,13 @@ export class UI {
   hideProfilesPanel() {
     const profilesPanel = document.querySelector('.profiles-panel');
     if (profilesPanel) {
-      profilesPanel.classList.add('hidden');
+      profilesPanel.classList.remove('show');
       this.state.panels.profiles.visible = false;
+
+      // Aktualizuj stan przycisku
+      if (this.elements.toggleButtons.profiles) {
+        this.elements.toggleButtons.profiles.classList.remove('rotated');
+      }
     }
   }
 }
