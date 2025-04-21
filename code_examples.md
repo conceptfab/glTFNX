@@ -1,7 +1,3 @@
-# Podsumowanie przykładów kodu Three.js
-
-## Kategorie przykładów
-
 ### 1. WebGL
 
 - **Animacje**
